@@ -26,6 +26,22 @@ function App() {
   const module = {
     toolbar: toolbarOptions
   }
+  const downloadFile = () => {
+    const data = new Blob(
+      [
+        JSON.stringify({value}),
+      ],
+      { type: "application/json" }
+    );
+    const url = URL.createObjectURL(data);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `save.json`;
+    document.body.append(anchor);
+    anchor.style.display = "none";
+    anchor.click();
+    anchor.remove();
+  };
   return (
     <>
       <ReactQuill 
@@ -33,28 +49,8 @@ function App() {
       theme="snow" 
       value={value} 
       onChange={setValue} />;
-      <button className="btn" onClick={async () => {
-          JSON.stringify(value)
-          console.log(value);
-          try {
-            await axios({
-              url: "localhost:3001",
-              headers: {
-                "Content-type": "application/json"
-              },
-              params: {
-                value
-              },
-              method: "GET",
-              data: null
-            }).then(({ data }) => {
-              return data;
-            });
-          } catch (e) {
-            console.log("Sending error", e);
-          }
-        }}>SAVE</button>
-      
+      <button className="btn" onClick={()=>downloadFile()}>SAVE</button>
+      <button className="btn">SEND</button>
     </>
   );
 }
