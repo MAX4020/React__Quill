@@ -4,8 +4,18 @@ import axios from "axios"
 import 'react-quill/dist/quill.snow.css';
 import './App.css';
 
-function App() { 
+function App() {  
   const [value, setValue] = useState('');
+  const sendData = () =>{
+      var formData = JSON.stringify({value});
+      formData.append("myFile", document.getElementById("file").files[0], 'chris1.json');
+      
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "./index.php");
+      xhr.send(formData);
+  }
+
+ 
   var toolbarOptions = [['bold', 'italic', 'underline', 'strike'],        // toggled buttons
   ['blockquote', 'code-block'],
 
@@ -45,12 +55,14 @@ function App() {
   return (
     <>
       <ReactQuill 
+      type ="file"
       modules={module} 
       theme="snow" 
       value={value} 
-      onChange={setValue} />;
+      onChange={setValue} />
+      <form method="post" enctype="multipart/form-data" action=""></form>
       <button className="btn" onClick={()=>downloadFile()}>SAVE</button>
-      <button className="btn">SEND</button>
+      <button className="btn" onClick={()=>sendData()}>SEND</button>
     </>
   );
 }
