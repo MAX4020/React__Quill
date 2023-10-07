@@ -7,12 +7,8 @@ import './App.css';
 function App() {  
   const [value, setValue] = useState('');
   const sendData = () =>{
-      var formData = JSON.stringify({value});
-      formData.append("myFile", document.getElementById("file").files[0], 'chris1.json');
-      
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "./index.php");
-      xhr.send(formData);
+     fetch("save.php",{method:"post",data:value})
+     console.log(value)
   }
 
  
@@ -54,15 +50,16 @@ function App() {
   };
   return (
     <>
+    <form method="post" enctype="multipart/form-data" action="">
       <ReactQuill 
       type ="file"
       modules={module} 
       theme="snow" 
       value={value} 
       onChange={setValue} />
-      <form method="post" enctype="multipart/form-data" action=""></form>
       <button className="btn" onClick={()=>downloadFile()}>SAVE</button>
       <button className="btn" onClick={()=>sendData()}>SEND</button>
+      </form>
     </>
   );
 }
